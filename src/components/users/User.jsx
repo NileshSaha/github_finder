@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-
+import { Link } from 'react-router-dom'
 
 function User({user: {login, avatar_url}}) {
   return (
@@ -15,12 +15,12 @@ function User({user: {login, avatar_url}}) {
         </div>
         <div>
           <h2 className='card-title'>{login}</h2>
-          {/* <Link
+          <Link
             className='text-base-content text-opacity-40'
             to={`/user/${login}`}
           >
             Visit Profile
-          </Link> */}
+          </Link>
         </div>
       </div>
     </div>
