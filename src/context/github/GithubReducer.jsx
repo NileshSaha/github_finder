@@ -1,5 +1,11 @@
 const githubReducer = (state, action) => {
   switch(action.type) {
+    case 'INITIAL':
+      return {
+        ...state,
+        users: [],
+        loading:false
+      }
     case 'GET_USERS':
       return {
         ...state,
