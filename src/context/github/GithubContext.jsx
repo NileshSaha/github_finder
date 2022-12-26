@@ -1,4 +1,5 @@
 import { createContext, useReducer } from "react";
+import { redirect } from "react-router-dom";
 import githubReducer from "./GithubReducer";
 
 const GithubContext = createContext()
@@ -8,7 +9,8 @@ const GITHUB_TOKEN = `${process.env.REACT_APP_GITHUB_TOKEN}`
 export const GithubProvider = ({children}) => {
   const initialState = {
     users: [],
-    loading:false
+    loading:false,
+    user: {}
   }
 
   const [state, dispatch] = useReducer(githubReducer, initialState)
@@ -43,6 +45,25 @@ export const GithubProvider = ({children}) => {
       payload: data.items
     })
   }
+  
+  
+  const getUser = async (login) => {
+    setLoading(true)
+    const response = await fetch(`${GITHUB_URL}/users/${login}`, {
+      headers: {
+        Authorization:`token ${GITHUB_TOKEN}`
+      }
+    })
+    if (response.status === 404) {
+      return redirect("/notfound");
+    } else {
+      const data = await response.json()
+      dispatch({
+        type: 'GET_USER',
+        payload: data
+      })
+    }
+  }
 
   const clearUsers = () => {
     dispatch({
@@ -60,9 +81,11 @@ export const GithubProvider = ({children}) => {
       value={{
         userList:state.users,
         loading:state.loading,
+        user:state.user,
         fetchUsers,
         searchUsers,
-        clearUsers
+        clearUsers,
+        getUser,
       }}>
       {children}
     </GithubContext.Provider>
