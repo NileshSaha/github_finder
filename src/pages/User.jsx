@@ -4,7 +4,7 @@ import { useParams, Link } from 'react-router-dom'
 import GithubContext from '../context/github/GithubContext'
 import Spinner from '../components/layout/Spinner'
 import RepoList from '../components/repos/RepoList'
-import { getUser, getUserRepos } from '../context/github/GithubActions'
+import { getUserAndRepos } from '../context/github/GithubActions'
 
 
 function User() {
@@ -18,16 +18,10 @@ function User() {
       payload: true
     })
     const userData = async () => {
-      const data  = await getUser(params.login)
+      const data  = await getUserAndRepos(params.login)
       dispatch({
-        type: 'GET_USER',
+        type: 'GET_USER_AND_REPOS',
         payload: data
-      })
-
-      const userRepos = await getUserRepos(params.login)
-      dispatch({
-        type: 'GET_USER_REPOS',
-        payload: userRepos
       })
     }
     userData()
