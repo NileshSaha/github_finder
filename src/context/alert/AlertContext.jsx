@@ -21,7 +21,7 @@ export const AlertProvider = ({children}) => {
         type:'REMOVE_ALERT',
       })
       
-    }, 3000);
+    }, 30000);
   }
 
   return (
