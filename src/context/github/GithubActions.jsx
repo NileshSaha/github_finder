@@ -21,14 +21,10 @@ export const getUser = async (login) => {
     }
   })
   if (response.status === 404) {
-    return {status:false, data:{}}
+    window.location = '/notfound'
   } else {
     const data = await response.json()
-    return {status:true, data}
-    // dispatch({
-    //   type: 'GET_USER',
-    //   payload: data
-    // })
+    return data
   }
 }
 
@@ -44,8 +40,4 @@ export const getUserRepos = async (login) => {
   })
   const data = await response.json()
   return data
-  // dispatch({
-  //   type: 'GET_USER_REPOS',
-  //   payload: data
-  // })
 }

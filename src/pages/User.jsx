@@ -1,6 +1,6 @@
 import {FaCodepen, FaStore, FaUserFriends, FaUsers} from 'react-icons/fa'
 import { useEffect, useContext } from 'react'
-import { useParams, Link, redirect } from 'react-router-dom'
+import { useParams, Link } from 'react-router-dom'
 import GithubContext from '../context/github/GithubContext'
 import Spinner from '../components/layout/Spinner'
 import RepoList from '../components/repos/RepoList'
@@ -13,37 +13,25 @@ function User() {
   const params = useParams()
 
   useEffect(() => {
-    getUserDetails(params.login)
-    getUserRepositories(params.login)
-  }, [])
-
-  const getUserDetails = async(login) => {
     dispatch({
       type:'SET_LOADING',
       payload: true
     })
-    const {status, data } = await getUser(login)
-    if (status) {
+    const userData = async () => {
+      const data  = await getUser(params.login)
       dispatch({
         type: 'GET_USER',
         payload: data
       })
-    } else {
-      return redirect('/notfound')
-    }
-  }
 
-  const getUserRepositories = async (login) => {
-    dispatch({
-      type:'SET_LOADING',
-      payload: true
-    })
-    const userRepos = await getUserRepos(login)
-    return dispatch({
-      type: 'GET_USER_REPOS',
-      payload: userRepos
-    })
-  }
+      const userRepos = await getUserRepos(params.login)
+      dispatch({
+        type: 'GET_USER_REPOS',
+        payload: userRepos
+      })
+    }
+    userData()
+  }, [dispatch, params.login])
 
   const {
     name,
